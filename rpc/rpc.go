@@ -38,22 +38,22 @@ func ParseReq(body io.ReadCloser) (RPCReq, error) {
     return RPCReq{}, err
   }
   o := RPCReq{}
-  key, ok := v["key"]
+  key, ok := v["Key"]
   if ok {
     switch key := key.(type) {
       case string:
         o.Key = key
       default:
-        return RPCReq{}, errors.New("key was not a string")
+        return RPCReq{}, errors.New("Key was not a string")
     }
   }
-  val, ok := v["val"]
+  val, ok := v["Val"]
   if ok {
     switch val := val.(type) {
       case string:
         o.Val = val
       default:
-        return RPCReq{}, errors.New("val was not a string")
+        return RPCReq{}, errors.New("Val was not a string")
     }
   }
   return o, nil
@@ -66,22 +66,22 @@ func ParseRes(body io.ReadCloser) (RPCRes, error) {
     return RPCRes{}, err
   }
   o := RPCRes{}
-  res, ok := v["res"]
+  res, ok := v["Res"]
   if ok {
     switch res := res.(type) {
       case string:
         o.Res = res
       default:
-        return RPCRes{}, errors.New("res was not a string")
+        return RPCRes{}, errors.New("Res was not a string")
     }
   }
-  err, ok := v["err"]
+  err, ok := v["Err"]
   if ok {
     switch err := err.(type) {
       case string:
         o.Err = err
       default:
-        return RPCRes{}, errors.New("err was not a string")
+        return RPCRes{}, errors.New("Err was not a string")
     }
   }
   return o, nil

@@ -6,7 +6,6 @@ import (
   "net/http"
   "math/big"
   "strconv"
-  "log"
   "fmt"
 
   "gochord/identifier"
@@ -34,11 +33,11 @@ func NewNode(port int, store store.Store, m int64) (*Node, error) {
 }
 
 //Starts a new chord group and starts the local http server to handle rpc requests
-func (n *Node) Start() {
+func (n *Node) Start() (error) {
   http.HandleFunc("/get/", bindNode(getHandle, n))
   http.HandleFunc("/set", bindNode(setHandle, n))
   portStr := ":"+strconv.Itoa(n.port)
-  log.Fatal(http.ListenAndServe(portStr, nil))
+  return http.ListenAndServe(portStr, nil)
 }
 
 func getHandle(res http.ResponseWriter, req *http.Request, n *Node) {
