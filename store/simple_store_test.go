@@ -2,6 +2,7 @@ package store
 
 import (
   "testing"
+  "fmt"
 )
 
 func TestSimpleStore(t *testing.T) {

@@ -1,25 +1,17 @@
 package gochord
 
 import (
-  _ "testing"
-  _ "os"
-  _ "net"
+  "testing"
+  "fmt"
+
+  "gochord/store"
 )
 
-/*
-func TestThings(t *testing.T) {
-  name, err := os.Hostname()
+func TestGetSet(t *testing.T) {
+  node, err := NewNode(8080, store.NewSimpleStore(), 100)
   if err != nil {
-    println(err)
+    t.Log(err)
+    t.Fail()
   }
-  println(name)
-  addr, err := net.LookupHost(name)
-  println(addr[0])
-  addr, err = net.LookupHost("localhost")
-  println(addr[0])
-  addrs, err := net.LookupIP(name)
-  println(addrs[0])
-  addrs, err = net.LookupIP("localhost")
-  println(addrs[0])
+  fmt.Printf("%v", node)
 }
-*/
