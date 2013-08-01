@@ -13,7 +13,7 @@ import (
 
 func TestGetSet(t *testing.T) {
   go func(){
-    node, err := NewNode(4067, store.NewSimpleStore(), 100)
+    node, err := NewNode(4067, store.NewSimpleStore(), 50)
     if err != nil {
       t.Log(err)
       t.Fail()

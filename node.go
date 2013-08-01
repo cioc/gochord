@@ -20,6 +20,7 @@ type Node struct {
   identifier *big.Int
   store store.Store
   finger map[int]string //finger table
+  predecessor string    //store as [host|ip]:port strings 
 }
 
 func NewNode(port int, store store.Store, m int64) (*Node, error) {
@@ -29,7 +30,7 @@ func NewNode(port int, store store.Store, m int64) (*Node, error) {
   if err != nil {
     return &Node{}, err
   }
-  return &Node{addr, port, m, ident, store, make(map[int]string)}, nil
+  return &Node{addr, port, m, ident, store, make(map[int]string), ""}, nil
 }
 
 //Starts a new chord group and starts the local http server to handle rpc requests
@@ -39,6 +40,13 @@ func (n *Node) Start() (error) {
   portStr := ":"+strconv.Itoa(n.port)
   return http.ListenAndServe(portStr, nil)
 }
+
+//node must have already be started to join another ring
+/*
+func (n *Node) Join(entryPoint string) (error) {
+
+}
+*/
 
 func getHandle(res http.ResponseWriter, req *http.Request, n *Node) {
   pieces, err := rpc.ParseURL(req.URL.Path, len("/get/"))
