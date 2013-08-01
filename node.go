@@ -36,18 +36,27 @@ func NewNode(port int, store store.Store, m int64) (*Node, error) {
 //Starts a new chord group and starts the local http server to handle rpc requests
 func (n *Node) Start() {
   http.HandleFunc("/get/", bindNode(getHandle, n))
-  http.HandleFunc("/set/", bindNode(setHandle, n))
+  http.HandleFunc("/set", bindNode(setHandle, n))
   portStr := ":"+strconv.Itoa(n.port)
   log.Fatal(http.ListenAndServe(portStr, nil))
 }
 
 func getHandle(res http.ResponseWriter, req *http.Request, n *Node) {
-  rpcreq, err := rpc.ParseReq(req.Body)
+  pieces, err := rpc.ParseURL(req.URL.Path, len("/get/"))
   if err != nil {
     fmt.Println(err)
     return
   }
-  val, ok := n.store.Get(rpcreq.Key)
+  if len(pieces) <= 0 {
+    fmt.Println("no key")
+    buf, err := rpc.EncodeRes("", "no key specified")
+      if err != nil {
+      fmt.Println(err)
+    }
+    fmt.Fprintf(res, buf.String())
+    return
+  }
+  val, ok := n.store.Get(pieces[0])
   var result, e string
   if ok {
     result = val

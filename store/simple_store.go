@@ -1,11 +1,16 @@
 package store
 
+import (
+  "sync"
+)
+
 type SimpleStore struct {
   m map[string]string
+  lock sync.Mutex
 }
 
 func NewSimpleStore() (*SimpleStore) {
-  return &SimpleStore{make(map[string]string)}
+  return &SimpleStore{make(map[string]string), Mutex{}}
 }
 
 func (s *SimpleStore) Get(key string) (string, bool) {

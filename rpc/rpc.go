@@ -5,6 +5,8 @@ import (
   "io"
   "bytes"
   "errors"
+  "net/url"
+  "strings"
 )
 
 type RPCReq struct {
@@ -15,6 +17,18 @@ type RPCReq struct {
 type RPCRes struct {
   Res string
   Err string
+}
+
+func ParseURL(req string, ignore int) ([]string, error) {
+  pieces := strings.Split(req[ignore:], "/")
+  for i := range pieces {
+    un, err := url.QueryUnescape(pieces[i])
+    if err != nil {
+      return nil, err
+    }
+    pieces[i] = un
+  }
+  return pieces, nil
 }
 
 func ParseReq(body io.ReadCloser) (RPCReq, error) {
