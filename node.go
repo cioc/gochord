@@ -74,7 +74,18 @@ func getHandle(res http.ResponseWriter, req *http.Request, n *Node) {
 }
 
 func setHandle(res http.ResponseWriter, req *http.Request, n *Node) {
-
+  reqrpc, err := rpc.ParseReq(req.Body)
+  if err != nil {
+    fmt.Println(err)
+    return
+  }
+  n.store.Set(reqrpc.Key, reqrpc.Val)
+  buf, err := rpc.EncodeRes("success","")
+  if err != nil {
+    fmt.Println(err)
+    return
+  }
+  fmt.Fprintf(res, buf.String())
 }
 
 //binds a node to http handler
